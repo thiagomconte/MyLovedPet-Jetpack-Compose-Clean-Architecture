@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">My Loved Pet</string>
+    <string name="home_empty_pets">Parece que você ainda não cadastrou nenhum pet. Vamos começar!</string>
+    <string name="home_btn_add">Adicionar</string>
+</resources>
