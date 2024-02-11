@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.conte.design_system.module.theme.AppColor
 import com.conte.design_system.module.utils.ExtraLargeRoundedCornerShape
 import com.conte.design_system.module.utils.ExtraSmallRoundedCornerShape
@@ -18,6 +20,7 @@ import com.conte.design_system.module.utils.SmallRoundedCornerShape
 fun AppButton(
     modifier: Modifier = Modifier,
     text: String,
+    fontSize: TextUnit = 16.sp,
     shape: RoundedCornerShape = ExtraSmallRoundedCornerShape,
     backgroundColor: Color = AppColor.Orange,
     contentColor: Color = AppColor.White,
@@ -33,7 +36,8 @@ fun AppButton(
     ) {
         AppText(
             text = text,
-            color = contentColor
+            color = contentColor,
+            fontSize = fontSize
         )
     }
 }

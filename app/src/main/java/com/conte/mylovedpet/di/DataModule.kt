@@ -25,7 +25,7 @@ object DataModule {
             appContext,
             AppDatabase::class.java,
             "my_loved_pet"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Singleton

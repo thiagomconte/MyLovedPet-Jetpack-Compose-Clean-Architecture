@@ -5,4 +5,11 @@
     <string name="home_btn_add">Adicionar</string>
     <string name="home_btn_retry">Tentar novamente</string>
     <string name="add_pet_nav_title">Adicionar Pet</string>
+    <string name="add_pet_select_type">Seu Pet é um gato ou um cachorro?</string>
+    <string name="add_pet_label_name">Nome do seu pet</string>
+    <string name="add_pet_label_birthday">Data de nascimento</string>
+    <string name="add_pet_label_breed">Raça</string>
+    <string name="add_pet_label_gender">Sexo:</string>
+    <string name="add_pet_label_gender_male">M</string>
+    <string name="add_pet_label_gender_female">F</string>
 </resources>

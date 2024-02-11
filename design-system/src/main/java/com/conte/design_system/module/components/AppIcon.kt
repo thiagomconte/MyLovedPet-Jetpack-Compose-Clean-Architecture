@@ -11,12 +11,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppIcon(
+    modifier: Modifier = Modifier,
     painter: Painter,
     size: Dp = 24.dp,
     tint: Color = Color.Unspecified
 ) {
     Icon(
-        modifier = Modifier.size(size),
+        modifier = modifier.size(size),
         painter = painter,
         contentDescription = null,
         tint = tint

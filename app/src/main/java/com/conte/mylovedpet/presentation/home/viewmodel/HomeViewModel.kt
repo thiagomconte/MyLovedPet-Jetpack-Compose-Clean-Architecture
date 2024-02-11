@@ -1,5 +1,6 @@
 package com.conte.mylovedpet.presentation.home.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.conte.domain.module.pet.usecase.GetAllPetsUseCase
@@ -47,6 +48,7 @@ class HomeViewModel @Inject constructor(
             }.onFailure {
                 _uiState.update {
                     error = true
+                    Log.e("HOM_VIEW_MODEL", it.message.orEmpty())
                 }
             }
         }
