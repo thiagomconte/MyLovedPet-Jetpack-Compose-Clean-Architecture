@@ -23,7 +23,11 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onAddPet() {
-        _uiState.pets = listOf(Pet.buildFake())
+
+    }
+
+    override fun onRetry() {
+        getPets()
     }
 
     private fun getPets() {
@@ -31,9 +35,12 @@ class HomeViewModel @Inject constructor(
             getAllPetsUseCase().onSuccess {
                 _uiState.update {
                     pets = it
+                    error = true
                 }
             }.onFailure {
-                // TODO
+                _uiState.update {
+                    error = true
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ hilt-navigation = "1.0.0"
 compose-navigation = "2.5.3"
 appcompat = "1.6.1"
 material = "1.8.0"
+klint = "12.1.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -50,7 +51,9 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 com-android-library = { id = "com.android.library", version.ref = "agp" }
-ksp = { id="com.google.devtools.ksp", version.ref = "ksp" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+klint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "klint" }
 
 [bundles]
 

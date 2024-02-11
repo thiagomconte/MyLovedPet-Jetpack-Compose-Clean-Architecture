@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">My Loved Pet</string>
     <string name="home_empty_pets">Parece que você ainda não cadastrou nenhum pet. Vamos começar!</string>
+    <string name="home_error_pets">Oops! Ocorreu um erro ao tentar encontrar seus pets!</string>
     <string name="home_btn_add">Adicionar</string>
+    <string name="home_btn_retry">Tentar novamente</string>
 </resources>

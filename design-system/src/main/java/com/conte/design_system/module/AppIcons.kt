@@ -10,4 +10,8 @@ object AppIcons {
     val DogIcon: Painter
         @Composable
         get() = painterResource(id = R.drawable.dog_icon)
+
+    val ErrorIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.error_icon)
 }

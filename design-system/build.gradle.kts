@@ -45,6 +45,12 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
 
+    // Test
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.ui.test.junit4)
+    testImplementation(libs.junit)
+
     // compose
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
@@ -52,4 +58,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }

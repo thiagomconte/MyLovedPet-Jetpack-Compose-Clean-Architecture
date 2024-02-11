@@ -39,6 +39,12 @@ dependencies {
 
     implementation(libs.core.ktx)
 
+    // Test
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.ui.test.junit4)
+    testImplementation(libs.junit)
+
     // room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
