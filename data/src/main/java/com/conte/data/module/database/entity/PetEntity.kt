@@ -8,7 +8,7 @@ import com.conte.domain.module.pet.model.PetType
 
 @Entity(tableName = "pets")
 data class PetEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String,

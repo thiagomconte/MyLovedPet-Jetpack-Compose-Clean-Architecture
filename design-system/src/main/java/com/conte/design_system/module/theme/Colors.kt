@@ -10,4 +10,5 @@ object AppColor {
     val Grey = Color(0xFFEFECEC)
     val Black = Color(0xFF000000)
     val White = Color(0xFFFFFFFF)
+    val Error = Color(0xFFFF3333)
 }

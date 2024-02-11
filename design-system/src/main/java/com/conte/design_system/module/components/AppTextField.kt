@@ -6,6 +6,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import com.conte.design_system.module.AppIcons
 import com.conte.design_system.module.theme.AppColor
 import com.conte.design_system.module.theme.JosefinSansFamily
 import com.conte.design_system.module.utils.DateTransformation
@@ -27,7 +29,9 @@ fun AppOutlineTextField(
     label: String,
     singleLine: Boolean = true,
     visualTransformationType: VisualTransformationType = VisualTransformationType.NONE,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    isError: Boolean = false,
+    borderColor: Color = AppColor.Peach.copy(alpha = .6F),
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -43,15 +47,20 @@ fun AppOutlineTextField(
         },
         textStyle = TextStyle(fontFamily = JosefinSansFamily, fontWeight = FontWeight.Normal),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            cursorColor = AppColor.Orange,
-            focusedBorderColor = AppColor.Orange,
-            unfocusedBorderColor = AppColor.Peach
+            cursorColor = borderColor.copy(alpha = 1F),
+            focusedBorderColor = borderColor.copy(alpha = 1F),
+            unfocusedBorderColor = borderColor,
+            errorBorderColor = AppColor.Error,
         ),
         visualTransformation = when (visualTransformationType) {
             VisualTransformationType.DATE -> DateTransformation()
             VisualTransformationType.NONE -> VisualTransformation.None
         },
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        isError = isError,
+        trailingIcon = if (isError) {
+            { AppIcon(painter = AppIcons.AlertIcon) }
+        } else null
     )
 }
 

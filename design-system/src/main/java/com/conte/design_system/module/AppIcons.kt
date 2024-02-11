@@ -15,6 +15,10 @@ object AppIcons {
         @Composable
         get() = painterResource(id = R.drawable.error_icon)
 
+    val AlertIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.alert_icon)
+
     val DogOutlineIcon: Painter
         @Composable
         get() = painterResource(id = R.drawable.dog_outline_icon)
@@ -22,4 +26,8 @@ object AppIcons {
     val CatOutlineIcon: Painter
         @Composable
         get() = painterResource(id = R.drawable.cat_outline_icon)
+
+    val PartyIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.party_icon)
 }

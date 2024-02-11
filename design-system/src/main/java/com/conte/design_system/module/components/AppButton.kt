@@ -24,6 +24,7 @@ fun AppButton(
     shape: RoundedCornerShape = ExtraSmallRoundedCornerShape,
     backgroundColor: Color = AppColor.Orange,
     contentColor: Color = AppColor.White,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
@@ -32,7 +33,8 @@ fun AppButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor,
         ),
-        shape = shape
+        shape = shape,
+        enabled = enabled
     ) {
         AppText(
             text = text,

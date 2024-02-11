@@ -1,21 +1,24 @@
 package com.conte.mylovedpet.presentation.home.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.conte.domain.module.pet.usecase.GetAllPetsUseCase
+import com.conte.domain.module.commons.logError
+import com.conte.domain.module.pet.usecase.FlowAllPetsUseCase
 import com.conte.mylovedpet.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllPetsUseCase: GetAllPetsUseCase
+    private val flowAllPetsUseCase: FlowAllPetsUseCase
 ) : ViewModel(), HomeUiAction {
 
     private val _uiState: MutableHomeUiState = MutableHomeUiState()
@@ -39,19 +42,20 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPets() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getAllPetsUseCase().onSuccess {
+        flowAllPetsUseCase()
+            .onEach {
                 _uiState.update {
                     pets = it
                     error = false
                 }
-            }.onFailure {
+            }
+            .catch {
                 _uiState.update {
                     error = true
-                    Log.e("HOM_VIEW_MODEL", it.message.orEmpty())
+                    logError { it.message }
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
 }

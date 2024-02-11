@@ -12,4 +12,5 @@
     <string name="add_pet_label_gender">Sexo:</string>
     <string name="add_pet_label_gender_male">M</string>
     <string name="add_pet_label_gender_female">F</string>
+    <string name="add_pet_btn_submit">Cadastrar</string>
 </resources>

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.conte.design_system.module.AppIcons
+import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppIcon
 import com.conte.design_system.module.components.AppOutlineTextField
 import com.conte.design_system.module.components.AppText
@@ -58,7 +59,8 @@ fun AddPetScreen(viewModel: AddPetViewModel = hiltViewModel(), navController: Na
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
             when (event) {
-                AddPetUiEvent.OnBack -> navController.popBackStack()
+                AddPetUiEvent.OnBack,
+                AddPetUiEvent.OnSubmit -> navController.popBackStack()
             }
         }
     }
@@ -82,37 +84,46 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(Baseline5)
+                .padding(horizontal = Baseline5)
                 .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Baseline4)
         ) {
+            Spacer(modifier = Modifier.width(Baseline5))
             AppText(
                 text = stringResource(id = R.string.add_pet_select_type),
                 fontSize = 20.sp,
                 align = TextAlign.Center,
             )
             SelectAvatar(uiState = uiState, onAvatarClick = { viewModel.onAvatarClick(it) })
+            // PET NAME
             AppOutlineTextField(
                 modifier = Modifier.fillMaxWidth(),
+                borderColor = if (uiState.petType == PetType.DOG) AppColor.Peach else AppColor.SoftBlue,
                 value = uiState.name,
                 label = stringResource(id = R.string.add_pet_label_name),
                 onValueChange = { viewModel.onNameTyping(it) }
             )
+            // PET BIRTHDAY
             AppOutlineTextField(
                 modifier = Modifier.fillMaxWidth(),
+                borderColor = if (uiState.petType == PetType.DOG) AppColor.Peach else AppColor.SoftBlue,
                 value = uiState.birthday,
                 label = stringResource(id = R.string.add_pet_label_birthday),
                 onValueChange = { viewModel.onBirthdayTyping(it) },
                 visualTransformationType = VisualTransformationType.DATE,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
+                isError = !uiState.validBirthday
             )
+            // PET BREED
             AppOutlineTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = uiState.name,
+                borderColor = if (uiState.petType == PetType.DOG) AppColor.Peach else AppColor.SoftBlue,
+                value = uiState.breed,
                 label = stringResource(id = R.string.add_pet_label_breed),
                 onValueChange = { viewModel.onBreedTyping(it) }
             )
+            // PET GENDER
             AppText(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.add_pet_label_gender),
@@ -126,7 +137,7 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
                     RadioButton(
                         selected = uiState.petGender == PetGender.MALE,
                         onClick = { viewModel.onPetGenderClick(PetGender.MALE) },
-                        colors = RadioButtonDefaults.colors(selectedColor = AppColor.Orange)
+                        colors = RadioButtonDefaults.colors(selectedColor = if (uiState.petType == PetType.DOG) AppColor.Peach else AppColor.SoftBlue)
                     )
                     Spacer(modifier = Modifier.width(Baseline2))
                     AppText(
@@ -139,7 +150,7 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
                     RadioButton(
                         selected = uiState.petGender == PetGender.FEMALE,
                         onClick = { viewModel.onPetGenderClick(PetGender.FEMALE) },
-                        colors = RadioButtonDefaults.colors(selectedColor = AppColor.Orange)
+                        colors = RadioButtonDefaults.colors(selectedColor = if (uiState.petType == PetType.DOG) AppColor.Peach else AppColor.SoftBlue)
                     )
                     Spacer(modifier = Modifier.width(Baseline2))
                     AppText(
@@ -147,6 +158,13 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
                         fontSize = 16.sp
                     )
                 }
+            }
+            AppButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.add_pet_btn_submit),
+                enabled = uiState.enableSubmitButton
+            ) {
+                viewModel.submit()
             }
             Spacer(modifier = Modifier.height(Baseline5))
         }

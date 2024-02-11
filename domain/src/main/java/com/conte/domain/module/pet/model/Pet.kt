@@ -1,7 +1,7 @@
 package com.conte.domain.module.pet.model
 
 data class Pet(
-    val id: Int,
+    val id: Int = 0,
     val name: String,
     val birthday: String,
     val breed: String,
