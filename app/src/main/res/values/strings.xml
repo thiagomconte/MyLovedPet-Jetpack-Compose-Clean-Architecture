@@ -4,4 +4,5 @@
     <string name="home_error_pets">Oops! Ocorreu um erro ao tentar encontrar seus pets!</string>
     <string name="home_btn_add">Adicionar</string>
     <string name="home_btn_retry">Tentar novamente</string>
+    <string name="add_pet_nav_title">Adicionar Pet</string>
 </resources>

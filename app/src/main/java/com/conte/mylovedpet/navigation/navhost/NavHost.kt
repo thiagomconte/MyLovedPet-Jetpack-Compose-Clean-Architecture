@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.navigation.Route
+import com.conte.mylovedpet.presentation.addpet.AddPetScreen
 import com.conte.mylovedpet.presentation.home.HomeScreen
 import com.conte.mylovedpet.presentation.splash.SplashScreen
 
@@ -21,7 +22,10 @@ fun NavHost(
         }
         navigation(startDestination = Navigation.Home.destination, route = Route.Main.destination) {
             composable(Navigation.Home.destination) {
-                HomeScreen()
+                HomeScreen(navController = navController)
+            }
+            composable(Navigation.AddPet.destination) {
+                AddPetScreen(navController = navController)
             }
         }
     }
