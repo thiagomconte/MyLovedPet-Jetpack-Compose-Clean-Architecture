@@ -38,6 +38,7 @@ import com.conte.design_system.module.theme.AppColor
 import com.conte.design_system.module.utils.Baseline3
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
+import com.conte.domain.module.pet.model.Pet
 import com.conte.domain.module.pet.model.PetType
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.navigation.Navigation
@@ -127,48 +128,7 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(Baseline4)) {
                         items(uiState.pets) {
-                            Card(
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = if (it.type == PetType.DOG) AppColor.Peach.copy(
-                                        alpha = .6f
-                                    ) else AppColor.SoftBlue.copy(alpha = .4f)
-                                )
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(
-                                            horizontal = Baseline3,
-                                            vertical = Baseline4
-                                        ),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .background(
-                                                if (it.type == PetType.DOG) AppColor.Peach else AppColor.SoftBlue,
-                                                CircleShape
-                                            ),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        AppIcon(
-                                            modifier = Modifier.padding(Baseline4),
-                                            painter = if (it.type == PetType.DOG) AppIcons.DogOutlineIcon else AppIcons.CatOutlineIcon,
-                                            size = 32.dp
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.width(Baseline3))
-                                    Column(verticalArrangement = Arrangement.SpaceEvenly) {
-                                        AppText(text = it.name, fontSize = 16.sp)
-                                        AppText(text = it.birthday.formatDate(), fontSize = 14.sp)
-                                    }
-                                    Spacer(modifier = Modifier.weight(1F))
-                                    if (isBirthday(it.birthday)) {
-                                        AppIcon(painter = AppIcons.PartyIcon, size = 24.dp)
-                                    }
-                                }
-                            }
+                            PetCard(it)
                         }
                         item {
                             AppButton(
@@ -181,6 +141,66 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun PetCard(pet: Pet) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (pet.type == PetType.DOG) AppColor.Peach.copy(
+                alpha = .6f
+            ) else AppColor.SoftBlue.copy(alpha = .4f)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = Baseline3,
+                    vertical = Baseline4
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(
+                        if (pet.type == PetType.DOG) AppColor.Peach else AppColor.SoftBlue,
+                        CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                AppIcon(
+                    modifier = Modifier.padding(Baseline4),
+                    painter = if (pet.type == PetType.DOG) AppIcons.DogOutlineIcon else AppIcons.CatOutlineIcon,
+                    size = 32.dp
+                )
+            }
+            Spacer(modifier = Modifier.width(Baseline3))
+            Column(verticalArrangement = Arrangement.SpaceEvenly) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AppIcon(
+                        painter = AppIcons.PawIcon,
+                        size = 16.dp
+                    )
+                    Spacer(modifier = Modifier.width(Baseline3))
+                    AppText(text = pet.name, fontSize = 16.sp)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AppIcon(
+                        painter = AppIcons.CalendarIcon,
+                        size = 16.dp
+                    )
+                    Spacer(modifier = Modifier.width(Baseline3))
+                    AppText(text = pet.birthday.formatDate(), fontSize = 14.sp)
+                }
+            }
+            Spacer(modifier = Modifier.weight(1F))
+            if (pet.birthday.isBirthday()) {
+                AppIcon(painter = AppIcons.PartyIcon, size = 24.dp)
             }
         }
     }

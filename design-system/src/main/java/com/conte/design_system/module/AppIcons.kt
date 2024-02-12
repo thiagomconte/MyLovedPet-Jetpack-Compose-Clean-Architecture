@@ -30,4 +30,12 @@ object AppIcons {
     val PartyIcon: Painter
         @Composable
         get() = painterResource(id = R.drawable.party_icon)
+
+    val PawIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.paw_icon)
+
+    val CalendarIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.calendar_icon)
 }
