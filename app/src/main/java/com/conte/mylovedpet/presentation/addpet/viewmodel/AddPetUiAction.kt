@@ -10,7 +10,8 @@ interface AddPetUiAction {
     fun onBreedTyping(value: String)
     fun onAvatarClick(type: PetType)
     fun onPetGenderClick(gender: PetGender)
-    fun submit()
+    fun onSubmit()
+    fun onSelectImage()
 
     companion object {
         fun buildFake() = object : AddPetUiAction {
@@ -20,7 +21,8 @@ interface AddPetUiAction {
             override fun onBreedTyping(value: String) {}
             override fun onAvatarClick(type: PetType) {}
             override fun onPetGenderClick(gender: PetGender) {}
-            override fun submit() {}
+            override fun onSubmit() {}
+            override fun onSelectImage() {}
         }
     }
 }

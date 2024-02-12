@@ -1,5 +1,7 @@
 package com.conte.mylovedpet.presentation.addpet
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,11 +58,20 @@ import com.conte.mylovedpet.presentation.addpet.viewmodel.MutableAddPetUiState
 @Composable
 fun AddPetScreen(viewModel: AddPetViewModel = hiltViewModel(), navController: NavController) {
 
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                viewModel.onImageSelected(it)
+            }
+        }
+
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
             when (event) {
                 AddPetUiEvent.OnBack,
                 AddPetUiEvent.OnSubmit -> navController.popBackStack()
+
+                AddPetUiEvent.OnSelectImage -> galleryLauncher.launch("image/*")
             }
         }
     }
@@ -164,7 +175,7 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
                 text = stringResource(id = R.string.add_pet_btn_submit),
                 enabled = uiState.enableSubmitButton
             ) {
-                viewModel.submit()
+                viewModel.onSubmit()
             }
             Spacer(modifier = Modifier.height(Baseline5))
         }

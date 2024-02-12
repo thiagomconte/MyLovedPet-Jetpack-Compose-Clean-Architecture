@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.conte.design_system"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 27

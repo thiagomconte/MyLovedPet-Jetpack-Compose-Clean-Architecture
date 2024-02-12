@@ -19,5 +19,7 @@ data class PetEntity(
     @ColumnInfo(name = "pet_type")
     val type: PetType,
     @ColumnInfo(name = "pet_gender")
-    val gender: PetGender
+    val gender: PetGender,
+    @ColumnInfo(name = "pet_image")
+    val image: String?
 )

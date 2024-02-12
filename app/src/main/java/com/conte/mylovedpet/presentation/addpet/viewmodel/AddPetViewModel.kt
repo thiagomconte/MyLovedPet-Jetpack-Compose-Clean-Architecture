@@ -1,5 +1,6 @@
 package com.conte.mylovedpet.presentation.addpet.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.conte.domain.module.commons.logError
@@ -54,14 +55,15 @@ class AddPetViewModel @Inject constructor(
         _uiState.petGender = gender
     }
 
-    override fun submit() {
+    override fun onSubmit() {
         viewModelScope.launch(Dispatchers.IO) {
             val pet = Pet(
                 name = uiState.name,
                 birthday = uiState.birthday,
                 breed = uiState.breed,
                 type = uiState.petType,
-                gender = uiState.petGender
+                gender = uiState.petGender,
+                uri = uiState.uri
             )
             insertPetUseCase(pet).onSuccess {
                 _channel.send(AddPetUiEvent.OnSubmit)
@@ -69,6 +71,16 @@ class AddPetViewModel @Inject constructor(
                 logError { it.message }
             }
         }
+    }
+
+    override fun onSelectImage() {
+        viewModelScope.launch(Dispatchers.Default) {
+            _channel.send(AddPetUiEvent.OnSelectImage)
+        }
+    }
+
+    fun onImageSelected(uri: Uri) {
+        _uiState.uri = uri
     }
 
     private fun isDateOfBirthValid(date: String): Boolean {

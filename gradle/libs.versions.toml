@@ -16,6 +16,7 @@ compose-navigation = "2.5.3"
 appcompat = "1.6.1"
 material = "1.8.0"
 klint = "12.1.0"
+coil = "2.5.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -44,6 +45,8 @@ hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.re
 
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

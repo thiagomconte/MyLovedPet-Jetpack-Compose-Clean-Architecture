@@ -1,5 +1,7 @@
 package com.conte.domain.module.pet.model
 
+import android.net.Uri
+
 data class Pet(
     val id: Int = 0,
     val name: String,
@@ -7,6 +9,7 @@ data class Pet(
     val breed: String,
     val type: PetType,
     val gender: PetGender,
+    val uri: Uri?
 ) {
 
     companion object {
@@ -16,7 +19,8 @@ data class Pet(
             birthday = "qualquer",
             breed = "Doberman",
             type = PetType.DOG,
-            gender = PetGender.MALE
+            gender = PetGender.MALE,
+            uri = null
         )
     }
 }

@@ -174,7 +174,7 @@ fun PetCard(pet: Pet) {
                 contentAlignment = Alignment.Center
             ) {
                 AppIcon(
-                    modifier = Modifier.padding(Baseline4),
+                    modifier = Modifier.padding(Baseline3),
                     painter = if (pet.type == PetType.DOG) AppIcons.DogOutlineIcon else AppIcons.CatOutlineIcon,
                     size = 32.dp
                 )

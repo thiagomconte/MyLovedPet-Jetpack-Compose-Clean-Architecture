@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.conte.mylovedpet"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.conte.mylovedpet"
@@ -84,6 +84,9 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     kapt(libs.room.compiler)
+
+    // Coil
+    implementation(libs.coil)
 
     implementation(project(":design-system"))
     implementation(project(":data"))

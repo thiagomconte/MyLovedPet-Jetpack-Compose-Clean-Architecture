@@ -1,5 +1,6 @@
 package com.conte.mylovedpet.presentation.addpet.viewmodel
 
+import android.net.Uri
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -18,6 +19,7 @@ interface AddPetUiState {
     val petType: PetType
     val petGender: PetGender
     val enableSubmitButton: Boolean
+    val uri: Uri?
 }
 
 class MutableAddPetUiState : AddPetUiState, Updatable {
@@ -27,6 +29,7 @@ class MutableAddPetUiState : AddPetUiState, Updatable {
     override var breed: String by mutableStateOf("")
     override var petType: PetType by mutableStateOf(PetType.DOG)
     override var petGender: PetGender by mutableStateOf(PetGender.MALE)
+    override var uri: Uri? by mutableStateOf(null)
     override val enableSubmitButton: Boolean by derivedStateOf {
         name.isNotEmpty() && birthday.isNotEmpty() && validBirthday
     }
