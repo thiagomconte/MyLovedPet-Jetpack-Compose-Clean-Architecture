@@ -1,17 +1,20 @@
 <resources>
-    <string name="app_name">My Loved Pet</string>
-    <string name="home_empty_pets">Parece que você ainda não cadastrou nenhum pet. Vamos começar!</string>
-    <string name="home_error_pets">Oops! Ocorreu um erro ao tentar encontrar seus pets!</string>
-    <string name="home_btn_add">Adicionar</string>
-    <string name="home_btn_retry">Tentar novamente</string>
-    <string name="add_pet_nav_title">Adicionar Pet</string>
-    <string name="add_pet_select_type">Seu Pet é um gato ou um cachorro?</string>
-    <string name="add_pet_label_name">Nome do seu pet</string>
+    <string name="add_pet_btn_select_image">Selecione uma imagem</string>
+    <string name="add_pet_btn_submit">Cadastrar</string>
     <string name="add_pet_label_birthday">Data de nascimento</string>
     <string name="add_pet_label_breed">Raça</string>
     <string name="add_pet_label_gender">Sexo:</string>
-    <string name="add_pet_label_gender_male">M</string>
     <string name="add_pet_label_gender_female">F</string>
-    <string name="add_pet_btn_submit">Cadastrar</string>
-    <string name="add_pet_btn_select_image">Selecione uma imagem</string>
+    <string name="add_pet_label_gender_male">M</string>
+    <string name="add_pet_label_name">Nome do seu pet</string>
+    <string name="add_pet_nav_title">Adicionar Pet</string>
+    <string name="add_pet_select_type">Seu Pet é um gato ou um cachorro?</string>
+    <string name="app_name">My Loved Pet</string>
+    <string name="home_btn_add">Adicionar</string>
+    <string name="home_btn_retry">Tentar novamente</string>
+    <string name="home_empty_pets">Parece que você ainda não cadastrou nenhum pet. Vamos começar!</string>
+    <string name="home_error_pets">Oops! Ocorreu um erro ao tentar encontrar seus pets!</string>
+    <string name="pet_event_btn_add">Adicionar</string>
+    <string name="pet_event_empty_label">Parece que você não possui nenhum evento agendado para , vamos adicionar?</string>
+    <string name="pet_event_nav_title">Meus Eventos</string>
 </resources>

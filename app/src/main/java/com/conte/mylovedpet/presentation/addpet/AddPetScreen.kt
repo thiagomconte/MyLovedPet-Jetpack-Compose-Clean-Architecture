@@ -1,7 +1,5 @@
 package com.conte.mylovedpet.presentation.addpet
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -58,12 +57,12 @@ import com.conte.mylovedpet.presentation.addpet.viewmodel.MutableAddPetUiState
 @Composable
 fun AddPetScreen(viewModel: AddPetViewModel = hiltViewModel(), navController: NavController) {
 
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let {
-                viewModel.onImageSelected(it)
-            }
-        }
+//    val galleryLauncher =
+//        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+//            uri?.let {
+//                viewModel.onImageSelected(it)
+//            }
+//        }
 
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
@@ -71,7 +70,9 @@ fun AddPetScreen(viewModel: AddPetViewModel = hiltViewModel(), navController: Na
                 AddPetUiEvent.OnBack,
                 AddPetUiEvent.OnSubmit -> navController.popBackStack()
 
-                AddPetUiEvent.OnSelectImage -> galleryLauncher.launch("image/*")
+                AddPetUiEvent.OnSelectImage -> {
+//                    galleryLauncher.launch("image/*")
+                }
             }
         }
     }
@@ -190,6 +191,7 @@ fun SelectAvatar(uiState: AddPetUiState, onAvatarClick: (type: PetType) -> Unit)
     ) {
         Box(
             modifier = Modifier
+                .clip(CircleShape)
                 .background(AppColor.Peach, CircleShape)
                 .applyModifier(condition = uiState.petType == PetType.DOG) {
                     this.border(4.dp, AppColor.Black, CircleShape)
@@ -205,6 +207,7 @@ fun SelectAvatar(uiState: AddPetUiState, onAvatarClick: (type: PetType) -> Unit)
         }
         Box(
             modifier = Modifier
+                .clip(CircleShape)
                 .background(AppColor.SoftBlue, CircleShape)
                 .applyModifier(condition = uiState.petType == PetType.CAT) {
                     this.border(4.dp, AppColor.Black, CircleShape)

@@ -1,7 +1,7 @@
-package com.conte.data.module.database.pet.repository
+package com.conte.data.module.pet.repository
 
-import com.conte.data.module.database.pet.mapper.toDomain
-import com.conte.data.module.database.pet.mapper.toEntity
+import com.conte.data.module.pet.mapper.toDomain
+import com.conte.data.module.pet.mapper.toEntity
 import com.conte.domain.module.pet.model.Pet
 import com.conte.domain.module.pet.repository.PetRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,4 +20,8 @@ class PetRepositoryImpl @Inject constructor(
     }
 
     override fun flowAll(): Flow<List<Pet>> = localDataSource.flowAll().map { it.toDomain() }
+
+    override suspend fun getById(id: Int): Result<Pet> = runCatching {
+        localDataSource.getById(id).getOrThrow().toDomain()
+    }
 }

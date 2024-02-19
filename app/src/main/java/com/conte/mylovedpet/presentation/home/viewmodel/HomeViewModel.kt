@@ -41,6 +41,12 @@ class HomeViewModel @Inject constructor(
         getPets()
     }
 
+    override fun onPetClick(id: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            _channel.send(HomeUiEvent.OnPetClick(id))
+        }
+    }
+
     private fun getPets() {
         flowAllPetsUseCase()
             .onEach {

@@ -1,6 +1,7 @@
 package com.conte.mylovedpet.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import com.conte.mylovedpet.presentation.home.viewmodel.HomeUiEvent
 import com.conte.mylovedpet.presentation.home.viewmodel.HomeUiState
 import com.conte.mylovedpet.presentation.home.viewmodel.HomeViewModel
 import com.conte.mylovedpet.presentation.home.viewmodel.MutableHomeUiState
+import com.conte.mylovedpet.utils.dateDifference
 import com.conte.mylovedpet.utils.formatDate
 import com.conte.mylovedpet.utils.isBirthday
 
@@ -64,6 +66,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavHos
 
                 HomeUiEvent.OnSettings -> {
                     // TODO()
+                }
+
+                is HomeUiEvent.OnPetClick -> {
+                    navController.navigate(Navigation.AddEvent.destination)
                 }
             }
         }
@@ -128,7 +134,9 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
                 } else {
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(Baseline4)) {
                         items(uiState.pets) {
-                            PetCard(it)
+                            PetCard(it) { petId ->
+                                viewModel.onPetClick(petId)
+                            }
                         }
                         item {
                             AppButton(
@@ -147,9 +155,13 @@ fun HomeScreen(viewModel: HomeUiAction, uiState: HomeUiState) {
 }
 
 @Composable
-fun PetCard(pet: Pet) {
+fun PetCard(pet: Pet, onClick: (id: Int) -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick(pet.id)
+            },
         colors = CardDefaults.cardColors(
             containerColor = if (pet.type == PetType.DOG) AppColor.Peach.copy(
                 alpha = .6f
@@ -195,7 +207,10 @@ fun PetCard(pet: Pet) {
                         size = 16.dp
                     )
                     Spacer(modifier = Modifier.width(Baseline3))
-                    AppText(text = pet.birthday.formatDate(), fontSize = 14.sp)
+                    AppText(
+                        text = "${pet.birthday.formatDate()} - ${pet.birthday.dateDifference()}",
+                        fontSize = 14.sp
+                    )
                 }
             }
             Spacer(modifier = Modifier.weight(1F))

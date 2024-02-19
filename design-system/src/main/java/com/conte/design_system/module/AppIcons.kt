@@ -38,4 +38,8 @@ object AppIcons {
     val CalendarIcon: Painter
         @Composable
         get() = painterResource(id = R.drawable.calendar_icon)
+
+    val EventIcon: Painter
+        @Composable
+        get() = painterResource(id = R.drawable.event_icon)
 }
