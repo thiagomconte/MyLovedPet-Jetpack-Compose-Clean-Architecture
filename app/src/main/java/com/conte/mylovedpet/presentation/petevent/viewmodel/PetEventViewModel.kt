@@ -20,7 +20,7 @@ class PetEventViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), PetEventUiAction {
 
-    private val petId = savedStateHandle.get<String>(Navigation.AddEvent.param).toIntOrInvalidInt()
+    private val petId = savedStateHandle.get<String>(Navigation.PetEvent.petId).toIntOrInvalidInt()
 
     private val _channel = Channel<PetEventUiEvent>()
     val channel = _channel.receiveAsFlow()
@@ -38,11 +38,20 @@ class PetEventViewModel @Inject constructor(
         }
     }
 
+    override fun onAddEventClick() {
+        viewModelScope.launch(Dispatchers.Default) {
+            uiState.pet?.let {
+                _channel.send(PetEventUiEvent.OnAddEventClick(it.id, it.name))
+            }
+        }
+    }
+
     private fun loadEvents() {
         viewModelScope.launch(Dispatchers.IO) {
             getAllPetEventsByPetUseCase(petId)
                 .onSuccess {
                     _uiState.update {
+                        pet = it.pet
                         events = it.events
                     }
                 }.onFailure {

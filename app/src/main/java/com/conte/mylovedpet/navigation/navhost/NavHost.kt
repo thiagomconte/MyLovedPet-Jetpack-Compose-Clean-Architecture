@@ -10,8 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.conte.mylovedpet.navigation.Navigation
+import com.conte.mylovedpet.navigation.Navigation.AddPetEvent.destinationWithParams
+import com.conte.mylovedpet.navigation.Navigation.PetEvent.destinationWithParams
 import com.conte.mylovedpet.navigation.Route
 import com.conte.mylovedpet.presentation.addpet.AddPetScreen
+import com.conte.mylovedpet.presentation.addpetevent.AddPetEventScreen
 import com.conte.mylovedpet.presentation.home.HomeScreen
 import com.conte.mylovedpet.presentation.petevent.PetEventScreen
 import com.conte.mylovedpet.presentation.splash.SplashScreen
@@ -38,12 +41,20 @@ private fun NavGraphBuilder.mainNavigation(navController: NavHostController) {
             AddPetScreen(navController = navController)
         }
         composable(
-            Navigation.AddEvent.destination,
-            arguments = listOf(navArgument(Navigation.AddEvent.param) {
+            Navigation.PetEvent.destinationWithParams(),
+            arguments = listOf(navArgument(Navigation.PetEvent.petId) {
                 type = NavType.StringType
             })
         ) {
             PetEventScreen(navController = navController)
+        }
+        composable(
+            Navigation.AddPetEvent.destinationWithParams(),
+            arguments = listOf(
+                navArgument(Navigation.AddPetEvent.petId) { type = NavType.IntType },
+                navArgument(Navigation.AddPetEvent.petName) { type = NavType.StringType })
+        ) {
+            AddPetEventScreen(navController = navController)
         }
     }
 }

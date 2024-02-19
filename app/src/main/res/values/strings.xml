@@ -15,6 +15,10 @@
     <string name="home_empty_pets">Parece que você ainda não cadastrou nenhum pet. Vamos começar!</string>
     <string name="home_error_pets">Oops! Ocorreu um erro ao tentar encontrar seus pets!</string>
     <string name="pet_event_btn_add">Adicionar</string>
-    <string name="pet_event_empty_label">Parece que você não possui nenhum evento agendado para , vamos adicionar?</string>
+    <string name="pet_event_empty_label">Parece que você não possui nenhum evento agendado para %1$s, vamos adicionar?</string>
     <string name="pet_event_nav_title">Meus Eventos</string>
+    <string name="add_pet_event_nav_title">Adicionar Evento</string>
+    <string name="add_pet_event_label_name">Nome do evento</string>
+    <string name="add_pet_event_label_date">Data do evento</string>
+
 </resources>

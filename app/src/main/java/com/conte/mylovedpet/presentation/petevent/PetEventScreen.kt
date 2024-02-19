@@ -27,6 +27,8 @@ import com.conte.design_system.module.components.AppTopBar
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
 import com.conte.mylovedpet.R
+import com.conte.mylovedpet.navigation.Navigation
+import com.conte.mylovedpet.navigation.Navigation.AddPetEvent.navigateParams
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiAction
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiEvent
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiState
@@ -41,6 +43,9 @@ fun PetEventScreen(viewModel: PetEventViewModel = hiltViewModel(), navController
         viewModel.channel.collect { event ->
             when (event) {
                 PetEventUiEvent.OnBack -> navController.popBackStack()
+                is PetEventUiEvent.OnAddEventClick -> navController.navigate(
+                    Navigation.AddPetEvent.navigateParams(event.petId, event.petName)
+                )
             }
         }
     }
@@ -72,7 +77,10 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
             if (uiState.events.isEmpty()) {
                 AppText(
                     modifier = Modifier.padding(top = Baseline5),
-                    text = stringResource(id = R.string.pet_event_empty_label),
+                    text = stringResource(
+                        id = R.string.pet_event_empty_label,
+                        uiState.pet?.name.orEmpty()
+                    ),
                     fontSize = 20.sp,
                     align = TextAlign.Center
                 )
@@ -82,7 +90,7 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.pet_event_btn_add)
                 ) {
-                    // TODO
+                    viewModel.onAddEventClick()
                 }
             } else {
                 AppText(text = "Funcionou")

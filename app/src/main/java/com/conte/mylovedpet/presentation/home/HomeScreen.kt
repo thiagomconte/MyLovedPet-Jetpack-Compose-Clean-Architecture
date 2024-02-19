@@ -43,6 +43,7 @@ import com.conte.domain.module.pet.model.Pet
 import com.conte.domain.module.pet.model.PetType
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.navigation.Navigation
+import com.conte.mylovedpet.navigation.Navigation.PetEvent.navigateParams
 import com.conte.mylovedpet.presentation.home.viewmodel.HomeUiAction
 import com.conte.mylovedpet.presentation.home.viewmodel.HomeUiEvent
 import com.conte.mylovedpet.presentation.home.viewmodel.HomeUiState
@@ -69,7 +70,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), navController: NavHos
                 }
 
                 is HomeUiEvent.OnPetClick -> {
-                    navController.navigate(Navigation.AddEvent.destination)
+                    navController.navigate(Navigation.PetEvent.navigateParams(event.id))
                 }
             }
         }
