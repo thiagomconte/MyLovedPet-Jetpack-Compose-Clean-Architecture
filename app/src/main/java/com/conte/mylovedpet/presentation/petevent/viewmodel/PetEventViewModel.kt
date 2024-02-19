@@ -10,7 +10,6 @@ import com.conte.mylovedpet.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,8 +24,6 @@ class PetEventViewModel @Inject constructor(
 
     private val _channel = Channel<PetEventUiEvent>()
     val channel = _channel.receiveAsFlow()
-
-    val x = MutableStateFlow<String>("")
 
     private val _uiState = MutablePetEventUiState()
     val uiState: PetEventUiState = _uiState
