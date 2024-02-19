@@ -1,15 +1,15 @@
 package com.conte.mylovedpet.utils
 
 import androidx.compose.runtime.snapshots.Snapshot
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.internal.synchronized
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
+private val mutex = Mutex()
 
 interface Updatable
 
-@OptIn(InternalCoroutinesApi::class)
-fun <T : Updatable> T.update(block: T.() -> Unit): T = try {
-    synchronized(this) {
+suspend fun <T : Updatable> T.update(block: T.() -> Unit): T = try {
+    mutex.withLock {
         Snapshot.withMutableSnapshot { block(this) }
         this
     }
