@@ -1,12 +1,14 @@
 package com.conte.mylovedpet.di
 
-import com.conte.domain.module.event.repository.PetEventRepository
-import com.conte.domain.module.event.usecase.GetAllPetEventsByPetUseCase
 import com.conte.domain.module.pet.repository.PetRepository
 import com.conte.domain.module.pet.usecase.FlowAllPetsUseCase
 import com.conte.domain.module.pet.usecase.GetAllPetsUseCase
 import com.conte.domain.module.pet.usecase.GetPetByIdUseCase
 import com.conte.domain.module.pet.usecase.InsertPetUseCase
+import com.conte.domain.module.petevent.repository.PetEventRepository
+import com.conte.domain.module.petevent.usecase.FlowAllPetEventsByPetUseCase
+import com.conte.domain.module.petevent.usecase.GetAllPetEventsByPetUseCase
+import com.conte.domain.module.petevent.usecase.InsertPetEventUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,7 +45,19 @@ object DomainModule {
 
     @Singleton
     @Provides
-    fun provideGetPetByIdUseCasGetAllPetEventsByPetUseCase(repository: PetEventRepository): GetAllPetEventsByPetUseCase {
+    fun provideGetAllPetEventsByPetUseCase(repository: PetEventRepository): GetAllPetEventsByPetUseCase {
         return GetAllPetEventsByPetUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideInsertPetEventUseCase(repository: PetEventRepository): InsertPetEventUseCase {
+        return InsertPetEventUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideFlowAllPetEventsByPetUseCase(repository: PetEventRepository): FlowAllPetEventsByPetUseCase {
+        return FlowAllPetEventsByPetUseCase(repository)
     }
 }

@@ -3,6 +3,8 @@ package com.conte.mylovedpet.presentation.addpetevent.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.conte.domain.module.petevent.model.PetEvent
+import com.conte.domain.module.petevent.usecase.InsertPetEventUseCase
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.utils.orInvalidInt
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,11 +13,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class AddPetEventViewModel @Inject constructor(
+    private val insertPetEventUseCase: InsertPetEventUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), AddPetEventUiAction {
 
@@ -44,11 +48,44 @@ class AddPetEventViewModel @Inject constructor(
         _uiState.validEventDate = isDateOfEventValid(value)
     }
 
+    override fun onEventTimeTyping(value: String) {
+        _uiState.eventTime = value
+        _uiState.validEventTime = isTimeValid(value)
+    }
+
+    override fun onSubmit() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val petEvent = PetEvent(
+                name = uiState.eventName,
+                time = uiState.eventDate.plus(uiState.eventTime),
+                petId = petId
+            )
+            insertPetEventUseCase(petEvent).onSuccess {
+                _channel.send(AddPetEventUiEvent.OnBack)
+            }.onFailure {
+
+            }
+        }
+    }
+
     private fun isDateOfEventValid(date: String): Boolean {
         try {
             val formatter = DateTimeFormatter.ofPattern("ddMMyyyy")
             val localDate = LocalDate.parse(date, formatter)
             if (!formatter.format(localDate).equals(date) || localDate < LocalDate.now()) {
+                return false
+            }
+            return true
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    private fun isTimeValid(time: String): Boolean {
+        try {
+            val formatter = DateTimeFormatter.ofPattern("HHmm")
+            val localTime = LocalTime.parse(time, formatter)
+            if (!formatter.format(localTime).equals(time)) {
                 return false
             }
             return true

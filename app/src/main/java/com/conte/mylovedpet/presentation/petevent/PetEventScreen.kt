@@ -1,12 +1,18 @@
 package com.conte.mylovedpet.presentation.petevent
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -24,8 +30,11 @@ import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppIcon
 import com.conte.design_system.module.components.AppText
 import com.conte.design_system.module.components.AppTopBar
+import com.conte.design_system.module.theme.AppColor
+import com.conte.design_system.module.utils.Baseline3
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
+import com.conte.domain.module.petevent.model.PetEvent
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.navigation.Navigation.AddPetEvent.navigateParams
@@ -33,6 +42,7 @@ import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiAction
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiEvent
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiState
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventViewModel
+import com.conte.mylovedpet.utils.formatDateTime
 
 @Composable
 fun PetEventScreen(viewModel: PetEventViewModel = hiltViewModel(), navController: NavController) {
@@ -69,11 +79,11 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = Baseline5)
-                .verticalScroll(state = rememberScrollState()),
+                .padding(horizontal = Baseline5),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Baseline4)
         ) {
+            Spacer(modifier = Modifier.height(Baseline5))
             if (uiState.events.isEmpty()) {
                 AppText(
                     modifier = Modifier.padding(top = Baseline5),
@@ -93,8 +103,47 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
                     viewModel.onAddEventClick()
                 }
             } else {
-                AppText(text = "Funcionou")
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(Baseline4)) {
+                    items(uiState.events) {
+                        EventCard(it)
+                    }
+                    item {
+                        AppButton(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = stringResource(id = R.string.pet_event_btn_add)
+                        ) {
+                            viewModel.onAddEventClick()
+                        }
+                    }
+                }
             }
+        }
+    }
+}
+
+@Composable
+fun EventCard(event: PetEvent) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+
+            },
+        colors = CardDefaults.cardColors(
+            containerColor = AppColor.Peach.copy(alpha = .6f)
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = Baseline3,
+                    vertical = Baseline4
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AppText(text = "${event.name} - ${event.time.formatDateTime()}", fontSize = 16.sp)
         }
     }
 }

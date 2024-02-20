@@ -10,8 +10,10 @@ class PetLocalDataSource @Inject constructor(
     private val petDao: PetDao
 ) {
 
-    suspend fun insert(pet: PetEntity): Result<Unit> = runCatching {
+    suspend fun insert(pet: PetEntity): Result<Long> = runCatching {
         petDao.insert(pet)
+    }.onFailure {
+        logError { "Failure to insert on PetLocalDataSource. $it" }
     }
 
     suspend fun getAll(): Result<List<PetEntity>> = runCatching {

@@ -9,8 +9,8 @@ import com.conte.data.module.pet.repository.PetLocalDataSource
 import com.conte.data.module.pet.repository.PetRepositoryImpl
 import com.conte.data.module.petevent.repository.PetEventLocalDataSource
 import com.conte.data.module.petevent.repository.PetEventRepositoryImpl
-import com.conte.domain.module.event.repository.PetEventRepository
 import com.conte.domain.module.pet.repository.PetRepository
+import com.conte.domain.module.petevent.repository.PetEventRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

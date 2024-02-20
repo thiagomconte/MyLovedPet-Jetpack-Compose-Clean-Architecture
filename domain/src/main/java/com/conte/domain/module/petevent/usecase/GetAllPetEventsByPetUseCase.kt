@@ -1,7 +1,7 @@
-package com.conte.domain.module.event.usecase
+package com.conte.domain.module.petevent.usecase
 
-import com.conte.domain.module.event.repository.PetEventRepository
 import com.conte.domain.module.pet.model.PetWithEvents
+import com.conte.domain.module.petevent.repository.PetEventRepository
 import javax.inject.Inject
 
 class GetAllPetEventsByPetUseCase @Inject constructor(

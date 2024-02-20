@@ -125,7 +125,8 @@ fun AddPetScreen(viewModel: AddPetUiAction, uiState: AddPetUiState) {
                 onValueChange = { viewModel.onBirthdayTyping(it) },
                 visualTransformationType = VisualTransformationType.DATE,
                 keyboardType = KeyboardType.Decimal,
-                isError = !uiState.validBirthday
+                isError = !uiState.validBirthday,
+                placeholder = "__/__/____"
             )
             // PET BREED
             AppOutlineTextField(

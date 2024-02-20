@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppOutlineTextField
 import com.conte.design_system.module.components.AppText
 import com.conte.design_system.module.components.AppTopBar
@@ -94,8 +95,28 @@ fun AddPetEventScreen(viewModel: AddPetEventUiAction, uiState: AddPetEventUiStat
                 onValueChange = { viewModel.onEventDateTyping(it) },
                 visualTransformationType = VisualTransformationType.DATE,
                 keyboardType = KeyboardType.Decimal,
-                isError = !uiState.validEventDate
+                isError = !uiState.validEventDate,
+                placeholder = "__/__/____"
             )
+            // EVENT TIME
+            AppOutlineTextField(
+                modifier = Modifier.fillMaxWidth(),
+                borderColor = AppColor.Peach,
+                value = uiState.eventTime,
+                label = stringResource(id = R.string.add_pet_event_label_time),
+                onValueChange = { viewModel.onEventTimeTyping(it) },
+                visualTransformationType = VisualTransformationType.TIME,
+                keyboardType = KeyboardType.Decimal,
+                isError = !uiState.validEventTime,
+                placeholder = "__:__"
+            )
+            AppButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.add_pet_event_btn_save),
+                enabled = uiState.enableSaveButton
+            ) {
+                viewModel.onSubmit()
+            }
         }
     }
 }

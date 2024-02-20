@@ -20,5 +20,7 @@
     <string name="add_pet_event_nav_title">Adicionar Evento</string>
     <string name="add_pet_event_label_name">Nome do evento</string>
     <string name="add_pet_event_label_date">Data do evento</string>
+    <string name="add_pet_event_label_time">Hora do evento</string>
+    <string name="add_pet_event_btn_save">Salvar</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.conte.mylovedpet.utils
 import com.conte.domain.module.commons.logError
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -31,6 +32,23 @@ fun String.dateDifference(): String {
         val difference = Period.between(date, LocalDate.now())
         "${difference.years}a ${difference.months}m ${difference.days}d"
     } else {
+        ""
+    }
+}
+
+fun String.formatDateTime(): String {
+    val formatterInput = DateTimeFormatter.ofPattern("ddMMyyyyHHmm")
+    val formatterOutputDate = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val formatterOutputTime = DateTimeFormatter.ofPattern("HH:mm")
+
+    return try {
+        val localDateTime = LocalDateTime.parse(this, formatterInput)
+        val formattedDate = localDateTime.format(formatterOutputDate)
+        val formattedTime = localDateTime.format(formatterOutputTime)
+
+        "$formattedDate as $formattedTime"
+    } catch (e: Exception) {
+        logError { "Error to convert dateTime: ${e.message}" }
         ""
     }
 }

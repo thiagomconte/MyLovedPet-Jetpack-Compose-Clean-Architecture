@@ -3,20 +3,22 @@ package com.conte.mylovedpet.presentation.petevent.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.conte.domain.module.event.usecase.GetAllPetEventsByPetUseCase
+import com.conte.domain.module.petevent.usecase.FlowAllPetEventsByPetUseCase
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.utils.toIntOrInvalidInt
 import com.conte.mylovedpet.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PetEventViewModel @Inject constructor(
-    private val getAllPetEventsByPetUseCase: GetAllPetEventsByPetUseCase,
+    private val flowAllPetEventsByPetUseCase: FlowAllPetEventsByPetUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), PetEventUiAction {
 
@@ -48,15 +50,14 @@ class PetEventViewModel @Inject constructor(
 
     private fun loadEvents() {
         viewModelScope.launch(Dispatchers.IO) {
-            getAllPetEventsByPetUseCase(petId)
-                .onSuccess {
+            flowAllPetEventsByPetUseCase(petId)
+                .onEach {
                     _uiState.update {
                         pet = it.pet
                         events = it.events
                     }
-                }.onFailure {
-
                 }
+                .launchIn(viewModelScope)
         }
     }
 }

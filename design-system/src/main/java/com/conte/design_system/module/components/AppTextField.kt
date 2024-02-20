@@ -18,6 +18,7 @@ import com.conte.design_system.module.AppIcons
 import com.conte.design_system.module.theme.AppColor
 import com.conte.design_system.module.theme.JosefinSansFamily
 import com.conte.design_system.module.utils.DateTransformation
+import com.conte.design_system.module.utils.TimeTransformation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,10 +33,31 @@ fun AppOutlineTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isError: Boolean = false,
     borderColor: Color = AppColor.Peach.copy(alpha = .6F),
+    placeholder: String? = null
 ) {
+
+    var validatedValue: String = value
+    val maxSize = visualTransformationType.size
+    when (visualTransformationType) {
+        VisualTransformationType.DATE -> {
+            if (value.length > maxSize) {
+                validatedValue = value.dropLast(1)
+            }
+        }
+
+        VisualTransformationType.TIME -> {
+            if (value.length > maxSize) {
+                validatedValue = value.dropLast(1)
+            }
+        }
+
+        VisualTransformationType.NONE -> {}
+    }
+
+
     OutlinedTextField(
         modifier = modifier,
-        value = value,
+        value = validatedValue,
         onValueChange = onValueChange,
         singleLine = singleLine,
         label = {
@@ -54,18 +76,28 @@ fun AppOutlineTextField(
         ),
         visualTransformation = when (visualTransformationType) {
             VisualTransformationType.DATE -> DateTransformation()
+            VisualTransformationType.TIME -> TimeTransformation()
             VisualTransformationType.NONE -> VisualTransformation.None
         },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         isError = isError,
         trailingIcon = if (isError) {
             { AppIcon(painter = AppIcons.AlertIcon) }
+        } else null,
+        placeholder = if (placeholder != null) {
+            {
+                AppText(
+                    text = placeholder,
+                    fontSize = fontSize,
+                    color = AppColor.Black.copy(alpha = .5F)
+                )
+            }
         } else null
     )
 }
 
-enum class VisualTransformationType {
-    DATE, NONE
+enum class VisualTransformationType(val size: Int) {
+    DATE(8), TIME(4), NONE(0);
 }
 
 @Preview
