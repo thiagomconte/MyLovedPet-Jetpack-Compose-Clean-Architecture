@@ -88,6 +88,9 @@ dependencies {
     // Coil
     implementation(libs.coil)
 
+    // work manager
+    implementation(libs.work.manager)
+
     implementation(project(":design-system"))
     implementation(project(":data"))
     implementation(project(":domain"))

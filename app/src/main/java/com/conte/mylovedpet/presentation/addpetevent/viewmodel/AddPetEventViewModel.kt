@@ -12,9 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,17 +58,30 @@ class AddPetEventViewModel @Inject constructor(
 
     override fun onSubmit() {
         viewModelScope.launch(Dispatchers.Default) {
+            val date = uiState.eventDate.plus(uiState.eventTime)
             val petEvent = PetEvent(
                 name = uiState.eventName,
-                time = uiState.eventDate.plus(uiState.eventTime),
+                time = date,
                 petId = petId
             )
             insertPetEventUseCase(petEvent).onSuccess {
-                _channel.send(AddPetEventUiEvent.OnBack)
+                _channel.send(AddPetEventUiEvent.OnAddPetEvent(calculateNotificationDate(date)))
             }.onFailure {
 
             }
         }
+    }
+
+    private fun calculateNotificationDate(dateString: String): Calendar {
+        val dateFormat = SimpleDateFormat("ddMMyyyyHHmm", Locale.getDefault())
+        val date = dateFormat.parse(dateString)
+
+        val targetDate = Calendar.getInstance()
+        date?.let { targetDate.time = it }
+
+        // Subtrai um dia da data desejada
+        targetDate.add(Calendar.DAY_OF_MONTH, -1)
+        return targetDate
     }
 
     private fun isDateOfEventValid(date: String): Boolean {
