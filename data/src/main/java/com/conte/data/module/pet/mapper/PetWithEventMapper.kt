@@ -6,5 +6,5 @@ import com.conte.domain.module.pet.model.PetWithEvents
 
 fun PetWithEventsEntity.toPetWithEvents() = PetWithEvents(
     pet = pet.toDomain(),
-    events = events.map { it.toDomain() }
+    events = events.map { it.toDomain() }.sortedBy { it.time }
 )

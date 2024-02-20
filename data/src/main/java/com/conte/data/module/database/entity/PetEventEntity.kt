@@ -11,7 +11,7 @@ data class PetEventEntity(
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "time")
-    val time: String,
+    val time: Long,
     @ColumnInfo(name = "pet_id")
     val petId: Int,
 )
