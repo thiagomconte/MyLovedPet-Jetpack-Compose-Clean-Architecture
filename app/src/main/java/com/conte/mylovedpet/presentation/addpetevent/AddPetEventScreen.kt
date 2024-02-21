@@ -1,12 +1,19 @@
 package com.conte.mylovedpet.presentation.addpetevent
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -21,13 +28,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import androidx.work.await
 import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppOutlineTextField
 import com.conte.design_system.module.components.AppText
 import com.conte.design_system.module.components.AppTopBar
 import com.conte.design_system.module.components.VisualTransformationType
 import com.conte.design_system.module.theme.AppColor
+import com.conte.design_system.module.utils.Baseline2
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
 import com.conte.mylovedpet.PetEventWorker
@@ -36,7 +46,11 @@ import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiActi
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiEvent
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiState
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventViewModel
+import com.conte.mylovedpet.utils.hasPermission
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun AddPetEventScreen(
     viewModel: AddPetEventViewModel = hiltViewModel(),
@@ -46,27 +60,58 @@ fun AddPetEventScreen(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            viewModel.onPermissionGranted()
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
             when (event) {
                 AddPetEventUiEvent.OnBack -> navController.popBackStack()
                 is AddPetEventUiEvent.OnAddPetEvent -> {
-                    val inputData = Data.Builder()
-                        .putString(PetEventWorker.KEY_NOTIFICATION_NAME, "Nome da Notificação")
-                        .putString(
-                            PetEventWorker.KEY_NOTIFICATION_DESCRIPTION,
-                            "Descrição da Notificação"
-                        )
-                        .build()
-                    val workRequest = OneTimeWorkRequestBuilder<PetEventWorker>()
-                        .setInputData(inputData)
-                        .setInitialDelay(
-                            event.date.timeInMillis - System.currentTimeMillis(),
-                            java.util.concurrent.TimeUnit.MILLISECONDS
-                        )
-                        .build()
+                    when {
+                        context.hasPermission(Manifest.permission.POST_NOTIFICATIONS) && event.allowNotification -> {
+                            val inputData = Data.Builder()
+                                .putString(
+                                    PetEventWorker.KEY_NOTIFICATION_NAME,
+                                    event.notificationTitle
+                                )
+                                .putString(
+                                    PetEventWorker.KEY_NOTIFICATION_DESCRIPTION,
+                                    event.notificationDescription
+                                )
+                                .build()
+                            val workRequest = OneTimeWorkRequestBuilder<PetEventWorker>()
+                                .setInputData(inputData)
+                                .setInitialDelay(
+                                    event.date.timeInMillis - System.currentTimeMillis(),
+                                    java.util.concurrent.TimeUnit.MILLISECONDS
+                                )
+                                .build()
 
-                    WorkManager.getInstance(context).enqueue(workRequest)
+                            WorkManager.getInstance(context).enqueue(workRequest)
+                            val result = withContext(Dispatchers.IO) {
+                                WorkManager.getInstance(context).getWorkInfoById(workRequest.id)
+                                    .await()
+                            }
+                            if (result.state == WorkInfo.State.SUCCEEDED) {
+                                val notificationId =
+                                    result.outputData.getInt(PetEventWorker.KEY_NOTIFICATION_ID, -1)
+                                viewModel.updatePetEventNotificationId(notificationId)
+                            }
+                            navController.popBackStack()
+                        }
+
+                        event.allowNotification -> {
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
+
+                        else -> navController.popBackStack()
+                    }
                 }
             }
         }
@@ -135,6 +180,19 @@ fun AddPetEventScreen(viewModel: AddPetEventUiAction, uiState: AddPetEventUiStat
                 isError = !uiState.validEventTime,
                 placeholder = "__:__"
             )
+            // Allow Notification checkBox
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(checked = uiState.allowNotification, onCheckedChange = {
+                    viewModel.onAllowNotificationClick(it)
+                })
+                AppText(
+                    modifier = Modifier.padding(start = Baseline2),
+                    text = stringResource(id = R.string.add_pet_event_label_allow_notification)
+                )
+            }
             AppButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.add_pet_event_btn_save),

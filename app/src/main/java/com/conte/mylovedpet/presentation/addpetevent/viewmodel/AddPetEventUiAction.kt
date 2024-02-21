@@ -5,5 +5,6 @@ interface AddPetEventUiAction {
     fun onEventNameTyping(value: String)
     fun onEventDateTyping(value: String)
     fun onEventTimeTyping(value: String)
+    fun onAllowNotificationClick(value: Boolean)
     fun onSubmit()
 }

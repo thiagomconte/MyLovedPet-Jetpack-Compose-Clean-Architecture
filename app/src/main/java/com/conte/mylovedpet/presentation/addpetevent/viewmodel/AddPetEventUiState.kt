@@ -16,6 +16,7 @@ interface AddPetEventUiState {
     val validEventDate: Boolean
     val validEventTime: Boolean
     val enableSaveButton: Boolean
+    val allowNotification: Boolean
 }
 
 class MutableAddPetEventUiState(petName: String) : AddPetEventUiState, Updatable {
@@ -28,4 +29,5 @@ class MutableAddPetEventUiState(petName: String) : AddPetEventUiState, Updatable
     override val enableSaveButton: Boolean by derivedStateOf {
         eventName.isNotEmpty() && eventDate.isNotEmpty() && validEventDate && eventTime.isNotEmpty() && validEventTime
     }
+    override var allowNotification: Boolean by mutableStateOf(false)
 }

@@ -83,8 +83,8 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Baseline4)
         ) {
-            Spacer(modifier = Modifier.height(Baseline5))
             if (uiState.events.isEmpty()) {
+                Spacer(modifier = Modifier.height(Baseline5))
                 AppText(
                     modifier = Modifier.padding(top = Baseline5),
                     text = stringResource(
@@ -104,6 +104,9 @@ fun PetEventScreen(viewModel: PetEventUiAction, uiState: PetEventUiState) {
                 }
             } else {
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(Baseline4)) {
+                    item {
+                        Spacer(modifier = Modifier.height(Baseline5))
+                    }
                     items(uiState.events) {
                         EventCard(it)
                     }

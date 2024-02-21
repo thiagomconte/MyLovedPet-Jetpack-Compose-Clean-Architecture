@@ -56,6 +56,10 @@ class AddPetEventViewModel @Inject constructor(
         _uiState.validEventTime = isTimeValid(value)
     }
 
+    override fun onAllowNotificationClick(value: Boolean) {
+        _uiState.allowNotification = value
+    }
+
     override fun onSubmit() {
         viewModelScope.launch(Dispatchers.Default) {
             val date = uiState.eventDate.plus(uiState.eventTime)
@@ -65,11 +69,37 @@ class AddPetEventViewModel @Inject constructor(
                 petId = petId
             )
             insertPetEventUseCase(petEvent).onSuccess {
-                _channel.send(AddPetEventUiEvent.OnAddPetEvent(calculateNotificationDate(date)))
+                onSubmitted()
             }.onFailure {
 
             }
         }
+    }
+
+    fun onPermissionGranted() {
+        viewModelScope.launch(Dispatchers.Default) {
+            onSubmitted()
+        }
+    }
+
+    fun updatePetEventNotificationId(notificationId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            // TODO()
+        }
+    }
+
+    private suspend fun onSubmitted() {
+        val date = uiState.eventDate.plus(uiState.eventTime)
+        val notificationTitle = "Lembrete para ${uiState.eventName}!"
+        val notificationDescription = "${uiState.eventName} de ${uiState.petName} é amanhã."
+        _channel.send(
+            AddPetEventUiEvent.OnAddPetEvent(
+                date = calculateNotificationDate(date),
+                notificationTitle = notificationTitle,
+                notificationDescription = notificationDescription,
+                allowNotification = _uiState.allowNotification
+            )
+        )
     }
 
     private fun calculateNotificationDate(dateString: String): Calendar {
@@ -79,7 +109,6 @@ class AddPetEventViewModel @Inject constructor(
         val targetDate = Calendar.getInstance()
         date?.let { targetDate.time = it }
 
-        // Subtrai um dia da data desejada
         targetDate.add(Calendar.DAY_OF_MONTH, -1)
         return targetDate
     }
