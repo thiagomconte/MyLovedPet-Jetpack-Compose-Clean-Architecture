@@ -5,4 +5,5 @@ data class PetEvent(
     val name: String,
     val time: String,
     val petId: Int,
+    val notificationId: Int = -1,
 )

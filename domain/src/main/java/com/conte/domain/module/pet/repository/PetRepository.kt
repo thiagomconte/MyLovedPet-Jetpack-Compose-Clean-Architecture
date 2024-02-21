@@ -12,4 +12,7 @@ interface PetRepository {
     fun flowAll(): Flow<List<Pet>>
 
     suspend fun getById(id: Int): Result<Pet>
+
+    suspend fun update(pet: Pet): Result<Unit>
+
 }

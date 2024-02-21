@@ -19,12 +19,24 @@ class PetEventLocalDataSource @Inject constructor(
         logError { "Failure to getAllEventsByPet($petId) on PetEventLocalDataSource. $it" }
     }
 
-    suspend fun insertPetEvent(petEventEntity: PetEventEntity): Result<Unit> = runCatching {
-        val result = dao.insert(petEventEntity)
-        if (result == ROW_NOT_INSERTED) throw DatabaseException("Failure to insert PetEventEntity")
+    suspend fun insertPetEvent(petEventEntity: PetEventEntity): Result<Long> = runCatching {
+        val resultId = dao.insert(petEventEntity)
+        if (resultId == ROW_NOT_INSERTED) throw DatabaseException("Failure to insert PetEventEntity")
+        resultId
     }.onFailure {
         logError { "Failure to insert on PetEventLocalDataSource. $it" }
     }
 
     fun flowAllEventsByPet(petId: Int): Flow<PetWithEventsEntity> = dao.flowAllByPet(petId)
+
+    suspend fun updatePetEventNotificationId(petEventId: Long, notificationId: Int): Result<Unit> =
+        runCatching {
+            dao.updatePetEventNotificationId(petEventId, notificationId)
+        }
+
+    suspend fun getEventById(id: Int): Result<PetEventEntity> = runCatching {
+        dao.getById(id)
+    }.onFailure {
+        logError { "Failure to getEventById($id) on PetEventLocalDataSource. $it" }
+    }
 }

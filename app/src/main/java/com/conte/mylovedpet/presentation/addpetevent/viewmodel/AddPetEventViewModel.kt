@@ -82,12 +82,6 @@ class AddPetEventViewModel @Inject constructor(
         }
     }
 
-    fun updatePetEventNotificationId(notificationId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // TODO()
-        }
-    }
-
     private suspend fun onSubmitted() {
         val date = uiState.eventDate.plus(uiState.eventTime)
         val notificationTitle = "Lembrete para ${uiState.eventName}!"

@@ -8,8 +8,11 @@ interface PetEventRepository {
 
     suspend fun getAllPetEventsByPet(petId: Int): Result<PetWithEvents>
 
-    suspend fun insertPetEvent(petEvent: PetEvent): Result<Unit>
+    suspend fun insertPetEvent(petEvent: PetEvent): Result<Long>
 
     suspend fun flowAllPetEventsByPet(petId: Int): Flow<PetWithEvents>
 
+    suspend fun updatePetEventNotificationId(petEventId: Long, notificationId: Int): Result<Unit>
+
+    suspend fun getPetEventById(id: Int): Result<PetEvent>
 }

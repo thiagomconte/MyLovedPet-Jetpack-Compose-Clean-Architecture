@@ -29,4 +29,8 @@ class PetLocalDataSource @Inject constructor(
     }.onFailure {
         logError { "Failure to getById($id) on PetLocalDataSource. $it" }
     }
+
+    suspend fun update(pet: PetEntity): Result<Unit> = runCatching {
+        petDao.update(pet)
+    }
 }

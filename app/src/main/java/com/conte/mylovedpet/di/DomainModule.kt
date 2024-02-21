@@ -9,6 +9,7 @@ import com.conte.domain.module.petevent.repository.PetEventRepository
 import com.conte.domain.module.petevent.usecase.FlowAllPetEventsByPetUseCase
 import com.conte.domain.module.petevent.usecase.GetAllPetEventsByPetUseCase
 import com.conte.domain.module.petevent.usecase.InsertPetEventUseCase
+import com.conte.domain.module.petevent.usecase.UpdatePetEventNotificationIdUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,6 +54,12 @@ object DomainModule {
     @Provides
     fun provideInsertPetEventUseCase(repository: PetEventRepository): InsertPetEventUseCase {
         return InsertPetEventUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdatePetEventNotificationIdUseCase(repository: PetEventRepository): UpdatePetEventNotificationIdUseCase {
+        return UpdatePetEventNotificationIdUseCase(repository)
     }
 
     @Singleton

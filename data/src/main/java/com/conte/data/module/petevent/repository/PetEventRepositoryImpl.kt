@@ -1,6 +1,7 @@
 package com.conte.data.module.petevent.repository
 
 import com.conte.data.module.pet.mapper.toPetWithEvents
+import com.conte.data.module.petevent.mapper.toDomain
 import com.conte.data.module.petevent.mapper.toEntity
 import com.conte.domain.module.pet.model.PetWithEvents
 import com.conte.domain.module.petevent.model.PetEvent
@@ -18,10 +19,21 @@ class PetEventRepositoryImpl @Inject constructor(
             localDataSource.getAllEventsByPet(petId).getOrThrow().toPetWithEvents()
         }
 
-    override suspend fun insertPetEvent(petEvent: PetEvent): Result<Unit> = runCatching {
+    override suspend fun insertPetEvent(petEvent: PetEvent): Result<Long> = runCatching {
         localDataSource.insertPetEvent(petEvent.toEntity()).getOrThrow()
     }
 
     override suspend fun flowAllPetEventsByPet(petId: Int): Flow<PetWithEvents> =
         localDataSource.flowAllEventsByPet(petId).map { it.toPetWithEvents() }
+
+    override suspend fun updatePetEventNotificationId(
+        petEventId: Long,
+        notificationId: Int
+    ): Result<Unit> = runCatching {
+        localDataSource.updatePetEventNotificationId(petEventId, notificationId).getOrThrow()
+    }
+
+    override suspend fun getPetEventById(id: Int): Result<PetEvent> = runCatching {
+        localDataSource.getEventById(id).getOrThrow().toDomain()
+    }
 }

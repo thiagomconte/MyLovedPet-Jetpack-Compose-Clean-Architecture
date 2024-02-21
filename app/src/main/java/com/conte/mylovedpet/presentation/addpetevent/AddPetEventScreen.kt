@@ -28,9 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.await
 import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppOutlineTextField
 import com.conte.design_system.module.components.AppText
@@ -47,8 +45,6 @@ import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiEven
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiState
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventViewModel
 import com.conte.mylovedpet.utils.hasPermission
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -94,15 +90,6 @@ fun AddPetEventScreen(
                                 .build()
 
                             WorkManager.getInstance(context).enqueue(workRequest)
-                            val result = withContext(Dispatchers.IO) {
-                                WorkManager.getInstance(context).getWorkInfoById(workRequest.id)
-                                    .await()
-                            }
-                            if (result.state == WorkInfo.State.SUCCEEDED) {
-                                val notificationId =
-                                    result.outputData.getInt(PetEventWorker.KEY_NOTIFICATION_ID, -1)
-                                viewModel.updatePetEventNotificationId(notificationId)
-                            }
                             navController.popBackStack()
                         }
 

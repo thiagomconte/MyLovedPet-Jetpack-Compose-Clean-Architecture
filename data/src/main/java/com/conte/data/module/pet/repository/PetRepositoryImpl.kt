@@ -24,4 +24,8 @@ class PetRepositoryImpl @Inject constructor(
     override suspend fun getById(id: Int): Result<Pet> = runCatching {
         localDataSource.getById(id).getOrThrow().toDomain()
     }
+
+    override suspend fun update(pet: Pet): Result<Unit> = runCatching {
+        localDataSource.update(pet.toEntity())
+    }
 }

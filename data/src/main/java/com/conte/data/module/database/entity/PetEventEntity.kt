@@ -14,4 +14,6 @@ data class PetEventEntity(
     val time: Long,
     @ColumnInfo(name = "pet_id")
     val petId: Int,
+    @ColumnInfo(name = "notification_id")
+    val notificationId: Int,
 )

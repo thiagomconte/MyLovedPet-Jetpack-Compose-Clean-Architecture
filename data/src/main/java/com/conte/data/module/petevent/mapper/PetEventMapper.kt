@@ -22,5 +22,5 @@ fun PetEvent.toEntity(): PetEventEntity {
     val localDateTime = LocalDateTime.parse(time, formatter)
     val timeToLong =
         localDateTime.toEpochSecond(java.time.ZoneOffset.UTC) * 1000 // Convertendo para milissegundos
-    return PetEventEntity(id, name, timeToLong, petId)
+    return PetEventEntity(id, name, timeToLong, petId, notificationId)
 }
