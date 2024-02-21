@@ -2,8 +2,6 @@ package com.conte.mylovedpet.presentation.addpetevent
 
 import android.Manifest
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,8 +42,11 @@ import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiActi
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiEvent
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiState
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventViewModel
-import com.conte.mylovedpet.utils.hasPermission
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun AddPetEventScreen(
@@ -56,13 +57,8 @@ fun AddPetEventScreen(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            viewModel.onPermissionGranted()
-        }
-    }
+    val notificationPermissionRequest =
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
@@ -70,7 +66,7 @@ fun AddPetEventScreen(
                 AddPetEventUiEvent.OnBack -> navController.popBackStack()
                 is AddPetEventUiEvent.OnAddPetEvent -> {
                     when {
-                        context.hasPermission(Manifest.permission.POST_NOTIFICATIONS) && event.allowNotification -> {
+                        notificationPermissionRequest.status.isGranted && event.allowNotification -> {
                             val inputData = Data.Builder()
                                 .putString(
                                     PetEventWorker.KEY_NOTIFICATION_NAME,
@@ -94,7 +90,7 @@ fun AddPetEventScreen(
                         }
 
                         event.allowNotification -> {
-                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            notificationPermissionRequest.launchPermissionRequest()
                         }
 
                         else -> navController.popBackStack()

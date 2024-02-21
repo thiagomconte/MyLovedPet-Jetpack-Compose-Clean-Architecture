@@ -91,6 +91,9 @@ dependencies {
     // work manager
     implementation(libs.work.manager)
 
+    // accompanist permissions
+    implementation(libs.accompanist.permissions)
+
     implementation(project(":design-system"))
     implementation(project(":data"))
     implementation(project(":domain"))
