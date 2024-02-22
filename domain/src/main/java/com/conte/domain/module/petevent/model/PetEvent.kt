@@ -6,4 +6,9 @@ data class PetEvent(
     val time: String,
     val petId: Int,
     val notificationId: Int = -1,
-)
+) {
+
+    companion object {
+        fun buildFake() = PetEvent(id = 7349, name = "Elsa", time = "", petId = 7264, notificationId = 9340)
+    }
+}

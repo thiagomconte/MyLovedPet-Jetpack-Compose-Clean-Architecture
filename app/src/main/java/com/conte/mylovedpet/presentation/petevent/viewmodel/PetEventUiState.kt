@@ -17,4 +17,11 @@ interface PetEventUiState {
 class MutablePetEventUiState : PetEventUiState, Updatable {
     override var pet: Pet? by mutableStateOf(null)
     override var events: List<PetEvent> by mutableStateOf(emptyList())
+
+    companion object {
+        fun buildFake() = MutablePetEventUiState().apply {
+            pet = Pet.buildFake()
+            events = listOf(PetEvent.buildFake())
+        }
+    }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.conte.domain.module.petevent.model.PetEvent
 import com.conte.domain.module.petevent.usecase.InsertPetEventUseCase
 import com.conte.mylovedpet.navigation.Navigation
+import com.conte.mylovedpet.utils.NotificationHelper
 import com.conte.mylovedpet.utils.orInvalidInt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddPetEventViewModel @Inject constructor(
     private val insertPetEventUseCase: InsertPetEventUseCase,
+    private val notificationHelper: NotificationHelper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), AddPetEventUiAction {
 
@@ -35,6 +37,8 @@ class AddPetEventViewModel @Inject constructor(
 
     private val _channel = Channel<AddPetEventUiEvent>()
     val channel = _channel.receiveAsFlow()
+
+    private var notificationId: Int = -1
 
     override fun onBack() {
         viewModelScope.launch(Dispatchers.Default) {
@@ -63,10 +67,12 @@ class AddPetEventViewModel @Inject constructor(
     override fun onSubmit() {
         viewModelScope.launch(Dispatchers.Default) {
             val date = uiState.eventDate.plus(uiState.eventTime)
+            notificationId = notificationHelper.generateNotificationRandomId()
             val petEvent = PetEvent(
                 name = uiState.eventName,
                 time = date,
-                petId = petId
+                petId = petId,
+                notificationId = notificationId
             )
             insertPetEventUseCase(petEvent).onSuccess {
                 onSubmitted()
@@ -91,7 +97,8 @@ class AddPetEventViewModel @Inject constructor(
                 date = calculateNotificationDate(date),
                 notificationTitle = notificationTitle,
                 notificationDescription = notificationDescription,
-                allowNotification = _uiState.allowNotification
+                allowNotification = _uiState.allowNotification,
+                notificationId = notificationId
             )
         )
     }

@@ -29,5 +29,5 @@ class MutableAddPetEventUiState(petName: String) : AddPetEventUiState, Updatable
     override val enableSaveButton: Boolean by derivedStateOf {
         eventName.isNotEmpty() && eventDate.isNotEmpty() && validEventDate && eventTime.isNotEmpty() && validEventTime
     }
-    override var allowNotification: Boolean by mutableStateOf(false)
+    override var allowNotification: Boolean by mutableStateOf(true)
 }

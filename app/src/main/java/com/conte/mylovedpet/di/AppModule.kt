@@ -2,9 +2,11 @@ package com.conte.mylovedpet.di
 
 import android.app.Application
 import android.content.Context
+import com.conte.mylovedpet.utils.NotificationHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,4 +19,8 @@ object AppModule {
     fun provideContextApplication(application: Application): Context {
         return application.applicationContext
     }
+
+    @Provides
+    @Singleton
+    fun provideNotificationHelper(@ApplicationContext context: Context) = NotificationHelper(context)
 }

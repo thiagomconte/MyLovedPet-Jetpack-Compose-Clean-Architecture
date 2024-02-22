@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -36,12 +37,14 @@ import com.conte.design_system.module.theme.AppColor
 import com.conte.design_system.module.utils.Baseline2
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
+import com.conte.domain.module.commons.logInfo
 import com.conte.mylovedpet.PetEventWorker
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiAction
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiEvent
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiState
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventViewModel
+import com.conte.mylovedpet.presentation.addpetevent.viewmodel.MutableAddPetEventUiState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -57,8 +60,11 @@ fun AddPetEventScreen(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    val notificationPermissionRequest =
-        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationPermissionRequest = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS) { isGranted ->
+        if (isGranted) {
+            viewModel.onPermissionGranted()
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.channel.collect { event ->
@@ -67,29 +73,22 @@ fun AddPetEventScreen(
                 is AddPetEventUiEvent.OnAddPetEvent -> {
                     when {
                         notificationPermissionRequest.status.isGranted && event.allowNotification -> {
+                            logInfo { "Permission granted, configuring worker!" }
                             val inputData = Data.Builder()
-                                .putString(
-                                    PetEventWorker.KEY_NOTIFICATION_NAME,
-                                    event.notificationTitle
-                                )
-                                .putString(
-                                    PetEventWorker.KEY_NOTIFICATION_DESCRIPTION,
-                                    event.notificationDescription
-                                )
+                                .putString(PetEventWorker.KEY_NOTIFICATION_NAME, event.notificationTitle)
+                                .putString(PetEventWorker.KEY_NOTIFICATION_DESCRIPTION, event.notificationDescription)
+                                .putInt(PetEventWorker.KEY_NOTIFICATION_ID, event.notificationId)
                                 .build()
                             val workRequest = OneTimeWorkRequestBuilder<PetEventWorker>()
                                 .setInputData(inputData)
-                                .setInitialDelay(
-                                    event.date.timeInMillis - System.currentTimeMillis(),
-                                    java.util.concurrent.TimeUnit.MILLISECONDS
-                                )
+                                .setInitialDelay(event.date.timeInMillis - System.currentTimeMillis(), java.util.concurrent.TimeUnit.MILLISECONDS)
                                 .build()
-
                             WorkManager.getInstance(context).enqueue(workRequest)
                             navController.popBackStack()
                         }
 
                         event.allowNotification -> {
+                            logInfo { "Permission denied, requesting permission again!" }
                             notificationPermissionRequest.launchPermissionRequest()
                         }
 
@@ -185,4 +184,10 @@ fun AddPetEventScreen(viewModel: AddPetEventUiAction, uiState: AddPetEventUiStat
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewAddPetEventScreen() {
+    AddPetEventScreen(viewModel = AddPetEventUiAction.buildFake(), uiState = MutableAddPetEventUiState("Ted"))
 }

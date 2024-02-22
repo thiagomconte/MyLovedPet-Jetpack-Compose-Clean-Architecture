@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +39,7 @@ import com.conte.domain.module.petevent.model.PetEvent
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.navigation.Navigation.AddPetEvent.navigateParams
+import com.conte.mylovedpet.presentation.petevent.viewmodel.MutablePetEventUiState
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiAction
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiEvent
 import com.conte.mylovedpet.presentation.petevent.viewmodel.PetEventUiState
@@ -149,4 +151,16 @@ fun EventCard(event: PetEvent) {
             AppText(text = "${event.name} - ${event.time.formatDateTime()}", fontSize = 16.sp)
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewPetEventScreen() {
+    PetEventScreen(viewModel = PetEventUiAction.buildFake(), uiState = MutablePetEventUiState())
+}
+
+@Preview
+@Composable
+fun PreviewPetEventScreenPopulated() {
+    PetEventScreen(viewModel = PetEventUiAction.buildFake(), uiState = MutablePetEventUiState.buildFake())
 }
