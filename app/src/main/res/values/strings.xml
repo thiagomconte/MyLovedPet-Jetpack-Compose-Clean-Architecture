@@ -23,5 +23,6 @@
     <string name="add_pet_event_label_time">Hora do evento</string>
     <string name="add_pet_event_label_allow_notification">Ativar notificação</string>
     <string name="add_pet_event_btn_save">Salvar</string>
-
+    <string name="add_pet_event_notification_title">Lembrete para %1$s!</string>
+    <string name="add_pet_event_notification_description">%1$s de %2$s é amanhã.</string>
 </resources>

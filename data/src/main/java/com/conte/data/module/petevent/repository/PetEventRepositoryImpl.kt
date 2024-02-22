@@ -8,6 +8,7 @@ import com.conte.domain.module.petevent.model.PetEvent
 import com.conte.domain.module.petevent.repository.PetEventRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 import javax.inject.Inject
 
 class PetEventRepositoryImpl @Inject constructor(
@@ -16,7 +17,7 @@ class PetEventRepositoryImpl @Inject constructor(
 
     override suspend fun getAllPetEventsByPet(petId: Int): Result<PetWithEvents> =
         runCatching {
-            localDataSource.getAllEventsByPet(petId).getOrThrow().toPetWithEvents()
+            localDataSource.getAllPetEventsByPet(petId).getOrThrow().toPetWithEvents()
         }
 
     override suspend fun insertPetEvent(petEvent: PetEvent): Result<Long> = runCatching {
@@ -24,16 +25,20 @@ class PetEventRepositoryImpl @Inject constructor(
     }
 
     override suspend fun flowAllPetEventsByPet(petId: Int): Flow<PetWithEvents> =
-        localDataSource.flowAllEventsByPet(petId).map { it.toPetWithEvents() }
+        localDataSource.flowAllPetEventsByPet(petId).map { it.toPetWithEvents() }
 
-    override suspend fun updatePetEventNotificationId(
+    override suspend fun updatePetEventWorkerId(
         petEventId: Long,
-        notificationId: Int
+        workerId: UUID
     ): Result<Unit> = runCatching {
-        localDataSource.updatePetEventNotificationId(petEventId, notificationId).getOrThrow()
+        localDataSource.updatePetEventWorkerId(petEventId, workerId.toString()).getOrThrow()
     }
 
     override suspend fun getPetEventById(id: Int): Result<PetEvent> = runCatching {
-        localDataSource.getEventById(id).getOrThrow().toDomain()
+        localDataSource.getPetEventById(id).getOrThrow().toDomain()
+    }
+
+    override suspend fun deletePetEvent(petEvent: PetEvent): Result<Unit> = runCatching {
+        localDataSource.deletePetEvent(petEvent.toEntity())
     }
 }

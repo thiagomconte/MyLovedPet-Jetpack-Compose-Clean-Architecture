@@ -30,7 +30,7 @@ class NotificationHelper @Inject constructor(
             .build()
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             notificationManager.notify(notificationId, notification)
-            logInfo { "Notification successfully notified!" }
+            logInfo { "Successfully notified!" }
         }
     }
 
@@ -41,6 +41,10 @@ class NotificationHelper @Inject constructor(
         val notificationManager: NotificationManager = getSystemService(context, NotificationManager::class.java) as NotificationManager
         notificationManager.createNotificationChannel(channel)
         logInfo { "Notification Channel created successfully!" }
+    }
+
+    fun removeNotification(notificationId: Int) {
+        notificationManager.cancel(notificationId)
     }
 
     companion object {

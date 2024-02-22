@@ -6,10 +6,11 @@ import com.conte.domain.module.pet.usecase.GetAllPetsUseCase
 import com.conte.domain.module.pet.usecase.GetPetByIdUseCase
 import com.conte.domain.module.pet.usecase.InsertPetUseCase
 import com.conte.domain.module.petevent.repository.PetEventRepository
+import com.conte.domain.module.petevent.usecase.DeletePetEventUseCase
 import com.conte.domain.module.petevent.usecase.FlowAllPetEventsByPetUseCase
 import com.conte.domain.module.petevent.usecase.GetAllPetEventsByPetUseCase
 import com.conte.domain.module.petevent.usecase.InsertPetEventUseCase
-import com.conte.domain.module.petevent.usecase.UpdatePetEventNotificationIdUseCase
+import com.conte.domain.module.petevent.usecase.UpdatePetEventWorkerIdUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,13 +59,19 @@ object DomainModule {
 
     @Singleton
     @Provides
-    fun provideUpdatePetEventNotificationIdUseCase(repository: PetEventRepository): UpdatePetEventNotificationIdUseCase {
-        return UpdatePetEventNotificationIdUseCase(repository)
+    fun provideUpdatePetEventNotificationIdUseCase(repository: PetEventRepository): UpdatePetEventWorkerIdUseCase {
+        return UpdatePetEventWorkerIdUseCase(repository)
     }
 
     @Singleton
     @Provides
     fun provideFlowAllPetEventsByPetUseCase(repository: PetEventRepository): FlowAllPetEventsByPetUseCase {
         return FlowAllPetEventsByPetUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeletePetEventUseCase(repository: PetEventRepository): DeletePetEventUseCase {
+        return DeletePetEventUseCase(repository)
     }
 }

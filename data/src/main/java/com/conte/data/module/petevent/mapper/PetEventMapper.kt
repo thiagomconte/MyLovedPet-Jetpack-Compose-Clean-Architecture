@@ -6,13 +6,14 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 fun PetEventEntity.toDomain(): PetEvent {
     val instant = Instant.ofEpochMilli(time)
     val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
     val formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmm")
     val longToDateTimeString = localDateTime.format(formatter)
-    return PetEvent(id, name, longToDateTimeString, petId)
+    return PetEvent(id, name, longToDateTimeString, petId, workerId?.let { UUID.fromString(workerId) })
 }
 
 fun List<PetEventEntity>.toDomain() = map { it.toDomain() }
@@ -22,5 +23,5 @@ fun PetEvent.toEntity(): PetEventEntity {
     val localDateTime = LocalDateTime.parse(time, formatter)
     val timeToLong =
         localDateTime.toEpochSecond(java.time.ZoneOffset.UTC) * 1000 // Convertendo para milissegundos
-    return PetEventEntity(id, name, timeToLong, petId, notificationId)
+    return PetEventEntity(id, name, timeToLong, petId, workerId?.let { workerId.toString() })
 }

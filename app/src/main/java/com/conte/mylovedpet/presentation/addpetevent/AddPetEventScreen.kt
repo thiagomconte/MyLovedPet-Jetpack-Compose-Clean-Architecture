@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,9 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.work.Data
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.conte.design_system.module.components.AppButton
 import com.conte.design_system.module.components.AppOutlineTextField
 import com.conte.design_system.module.components.AppText
@@ -38,7 +35,6 @@ import com.conte.design_system.module.utils.Baseline2
 import com.conte.design_system.module.utils.Baseline4
 import com.conte.design_system.module.utils.Baseline5
 import com.conte.domain.module.commons.logInfo
-import com.conte.mylovedpet.PetEventWorker
 import com.conte.mylovedpet.R
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiAction
 import com.conte.mylovedpet.presentation.addpetevent.viewmodel.AddPetEventUiEvent
@@ -73,18 +69,10 @@ fun AddPetEventScreen(
                 is AddPetEventUiEvent.OnAddPetEvent -> {
                     when {
                         notificationPermissionRequest.status.isGranted && event.allowNotification -> {
-                            logInfo { "Permission granted, configuring worker!" }
-                            val inputData = Data.Builder()
-                                .putString(PetEventWorker.KEY_NOTIFICATION_NAME, event.notificationTitle)
-                                .putString(PetEventWorker.KEY_NOTIFICATION_DESCRIPTION, event.notificationDescription)
-                                .putInt(PetEventWorker.KEY_NOTIFICATION_ID, event.notificationId)
-                                .build()
-                            val workRequest = OneTimeWorkRequestBuilder<PetEventWorker>()
-                                .setInputData(inputData)
-                                .setInitialDelay(event.date.timeInMillis - System.currentTimeMillis(), java.util.concurrent.TimeUnit.MILLISECONDS)
-                                .build()
-                            WorkManager.getInstance(context).enqueue(workRequest)
-                            navController.popBackStack()
+                            logInfo { "Permission is already granted! Scheduling Worker!" }
+                            viewModel.scheduleWorker {
+                                navController.popBackStack()
+                            }
                         }
 
                         event.allowNotification -> {
@@ -103,7 +91,6 @@ fun AddPetEventScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPetEventScreen(viewModel: AddPetEventUiAction, uiState: AddPetEventUiState) {
     Scaffold(
@@ -167,9 +154,13 @@ fun AddPetEventScreen(viewModel: AddPetEventUiAction, uiState: AddPetEventUiStat
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Checkbox(checked = uiState.allowNotification, onCheckedChange = {
-                    viewModel.onAllowNotificationClick(it)
-                })
+                Checkbox(
+                    checked = uiState.allowNotification,
+                    onCheckedChange = {
+                        viewModel.onAllowNotificationClick(it)
+                    },
+                    colors = CheckboxDefaults.colors(checkedColor = AppColor.Peach)
+                )
                 AppText(
                     modifier = Modifier.padding(start = Baseline2),
                     text = stringResource(id = R.string.add_pet_event_label_allow_notification)

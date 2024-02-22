@@ -36,17 +36,15 @@ fun String.dateDifference(): String {
     }
 }
 
-fun String.formatDateTime(): String {
+fun String.formatTime(): String {
     val formatterInput = DateTimeFormatter.ofPattern("ddMMyyyyHHmm")
-    val formatterOutputDate = DateTimeFormatter.ofPattern("dd/MM/yyyy")
     val formatterOutputTime = DateTimeFormatter.ofPattern("HH:mm")
 
     return try {
         val localDateTime = LocalDateTime.parse(this, formatterInput)
-        val formattedDate = localDateTime.format(formatterOutputDate)
         val formattedTime = localDateTime.format(formatterOutputTime)
 
-        "$formattedDate as $formattedTime"
+        formattedTime
     } catch (e: Exception) {
         logError { "Error to convert dateTime: ${e.message}" }
         ""

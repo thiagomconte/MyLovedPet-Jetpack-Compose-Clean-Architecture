@@ -3,6 +3,9 @@ package com.conte.mylovedpet.presentation.petevent.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
+import com.conte.domain.module.petevent.model.PetEvent
+import com.conte.domain.module.petevent.usecase.DeletePetEventUseCase
 import com.conte.domain.module.petevent.usecase.FlowAllPetEventsByPetUseCase
 import com.conte.mylovedpet.navigation.Navigation
 import com.conte.mylovedpet.utils.toIntOrInvalidInt
@@ -19,6 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PetEventViewModel @Inject constructor(
     private val flowAllPetEventsByPetUseCase: FlowAllPetEventsByPetUseCase,
+    private val deletePetEventUseCase: DeletePetEventUseCase,
+    private val workManager: WorkManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), PetEventUiAction {
 
@@ -44,6 +49,18 @@ class PetEventViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             uiState.pet?.let {
                 _channel.send(PetEventUiEvent.OnAddEventClick(it.id, it.name))
+            }
+        }
+    }
+
+    override fun onDeleteClick(petEvent: PetEvent) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deletePetEventUseCase(petEvent).onSuccess {
+                petEvent.workerId?.let {
+                    workManager.cancelWorkById(it)
+                }
+            }.onFailure {
+
             }
         }
     }

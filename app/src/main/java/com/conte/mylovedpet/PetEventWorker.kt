@@ -21,10 +21,9 @@ class PetEventWorker @AssistedInject constructor(
         return withContext(Dispatchers.IO) {
             val notificationName = params.inputData.getString(KEY_NOTIFICATION_NAME)
             val notificationDescription = params.inputData.getString(KEY_NOTIFICATION_DESCRIPTION)
-            val notificationId = params.inputData.getInt(KEY_NOTIFICATION_ID, -1)
-            if (notificationName != null && notificationDescription != null && notificationId != -1) {
+            if (notificationName != null && notificationDescription != null) {
                 notificationHelper.createNotificationAndNotify(
-                    notificationId = notificationId,
+                    notificationId = notificationHelper.generateNotificationRandomId(),
                     notificationName = notificationName,
                     notificationDescription = notificationDescription
                 )
@@ -38,6 +37,5 @@ class PetEventWorker @AssistedInject constructor(
     companion object {
         const val KEY_NOTIFICATION_NAME = "KEY_NOTIFICATION_NAME"
         const val KEY_NOTIFICATION_DESCRIPTION = "KEY_NOTIFICATION_DESCRIPTION"
-        const val KEY_NOTIFICATION_ID = "KEY_NOTIFICATION_ID"
     }
 }

@@ -2,6 +2,7 @@ package com.conte.mylovedpet.di
 
 import android.app.Application
 import android.content.Context
+import androidx.work.WorkManager
 import com.conte.mylovedpet.utils.NotificationHelper
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNotificationHelper(@ApplicationContext context: Context) = NotificationHelper(context)
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager = WorkManager.getInstance(context)
 }

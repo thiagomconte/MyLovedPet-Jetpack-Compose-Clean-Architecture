@@ -17,5 +17,11 @@ class MutableHomeUiState : HomeUiState, Updatable {
 
     override var pets: List<Pet> by mutableStateOf(emptyList())
     override var error: Boolean by mutableStateOf(false)
+
+    companion object {
+        fun buildFake() = MutableHomeUiState().apply {
+            pets = listOf(Pet.buildFake())
+        }
+    }
 }
 

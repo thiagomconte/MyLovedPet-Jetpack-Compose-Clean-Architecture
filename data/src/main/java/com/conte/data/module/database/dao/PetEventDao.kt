@@ -18,9 +18,9 @@ interface PetEventDao : BaseDao<PetEventEntity> {
     @Query("SELECT * FROM pet_event WHERE id = :id")
     suspend fun getById(id: Int): PetEventEntity
 
-    @Query("UPDATE pet_event SET notification_id = :notificationId WHERE id = :petEventId")
-    suspend fun updatePetEventNotificationId(
+    @Query("UPDATE pet_event SET worker_id = :workerId WHERE id = :petEventId")
+    suspend fun updatePetEventWorkerId(
         petEventId: Long,
-        notificationId: Int
+        workerId: String
     )
 }
