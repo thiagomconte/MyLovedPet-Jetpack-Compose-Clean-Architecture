@@ -7,6 +7,7 @@ This project is an Android application developed using Kotlin programming langua
 - **Clean Architecture:** The project follows the principles of Clean Architecture, promoting separation of concerns and maintainability.
 - **MVVM Architecture:** The application architecture is based on the Model-View-ViewModel pattern, ensuring a clear separation of UI and business logic.
 - **Jetpack Compose:** Utilizes Jetpack Compose for building the UI with a declarative approach.
+- **Jetpack Compose Navigation:** Implements Jetpack Compose Navigation for navigation within the application.
 - **Room Database:** Integrates Room Database for local data storage and management.
 - **Coroutines Flow:** Utilizes Coroutines Flow for asynchronous programming and data stream handling.
 - **Version Catalogs:** Manages dependencies and versions using Version Catalogs for easier dependency management.
