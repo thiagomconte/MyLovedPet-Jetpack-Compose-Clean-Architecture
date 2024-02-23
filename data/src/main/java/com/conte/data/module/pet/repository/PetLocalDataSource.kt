@@ -25,7 +25,7 @@ class PetLocalDataSource @Inject constructor(
     fun flowAll(): Flow<List<PetEntity>> = petDao.flowAll()
 
     suspend fun getById(id: Int): Result<PetEntity> = runCatching {
-        petDao.get(id)
+        petDao.getById(id)
     }.onFailure {
         logError { "Failure to getById($id) on PetLocalDataSource. $it" }
     }

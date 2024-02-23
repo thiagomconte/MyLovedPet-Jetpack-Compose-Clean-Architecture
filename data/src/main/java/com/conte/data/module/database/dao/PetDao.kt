@@ -15,5 +15,5 @@ interface PetDao : BaseDao<PetEntity> {
     fun flowAll(): Flow<List<PetEntity>>
 
     @Query("SELECT * from pets WHERE id = :id")
-    suspend fun get(id: Int): PetEntity
+    suspend fun getById(id: Int): PetEntity
 }

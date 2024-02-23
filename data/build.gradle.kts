@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "18"
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -40,10 +43,9 @@ dependencies {
     implementation(libs.core.ktx)
 
     // Test
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.ui.test.junit4)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 
     // room
     implementation(libs.room.runtime)
