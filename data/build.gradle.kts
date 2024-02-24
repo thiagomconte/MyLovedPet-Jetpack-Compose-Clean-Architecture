@@ -41,11 +41,20 @@ android {
 dependencies {
 
     implementation(libs.core.ktx)
+    implementation(libs.androidx.runner)
 
     // Test
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.ext.junit.ktx)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
+
+    androidTestImplementation(libs.hilt.testing)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+    androidTestImplementation(libs.arch.core)
+    androidTestImplementation(libs.coroutines.testing)
+    androidTestImplementation(libs.turbine)
 
     // room
     implementation(libs.room.runtime)
