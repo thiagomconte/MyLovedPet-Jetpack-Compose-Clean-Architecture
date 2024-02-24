@@ -103,6 +103,5 @@ class PetEventDaoTest : BaseTest() {
             image = null
         )
         val petEventEntity1 = PetEventEntity(id = 1, name = "Vacina", time = 1708803478, petId = 1, workerId = null)
-
     }
 }
