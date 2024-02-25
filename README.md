@@ -15,6 +15,7 @@ This project is an Android application developed using Kotlin programming langua
 - **Hilt:** Utilizes Hilt for dependency injection, promoting code modularity and testability.
 - **HiltWorker:** Integrates HiltWorker for dependency injection in background workers.
 - **WorkManager:** Utilizes WorkManager for background tasks and scheduling.
+- **Testing with JUnit and MockK:** Implements testing with JUnit and MockK for unit testing and mocking dependencies.
 
 ## Future Improvements
 - Implement additional features for enhanced functionality.
